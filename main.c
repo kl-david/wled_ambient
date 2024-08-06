@@ -45,7 +45,6 @@ void calculate_average_rgb(Display *display, Window window, int width, int heigh
 
     XImage *image = XGetImage(display, window, 0, 0, width, height, AllPlanes, ZPixmap);
 
-    //unsigned long red_total = 0, green_total = 0, blue_total = 0;
     long_RGB total_rgb = {0};
 
     unsigned long pixel;
@@ -103,9 +102,11 @@ void post_rgb(RGB rgb){
     snprintf(post_data, sizeof(post_data), "{\"seg\":[{\"col\":[[%u,%u,%u]]}]}", rgb.r, rgb.g, rgb.b);
     curl_easy_setopt(curl, CURLOPT_URL, URL);
     curl_easy_setopt(curl, CURLOPT_POSTFIELDS, post_data);
+
     struct curl_slist *headers = NULL;
     headers = curl_slist_append(headers, "Content-Type: application/json");
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+
     res = curl_easy_perform(curl);
 
     curl_easy_cleanup(curl);
