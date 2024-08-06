@@ -148,10 +148,13 @@ int main() {
         calculate_average_rgb(display, focused_window, width, height, &rgb);
         rgb = static_apply_gamma_correction(rgb);
         if((abs(rgb.r - old_rgb.r) > 5) || (abs(rgb.g - old_rgb.g) > 5) || (abs(rgb.r - old_rgb.r) > 5)){
-            //printf("change\n");
-            //printf("Average R: %u, Average G: %u, Average B: %u\n", rgb.r, rgb.g, rgb.b);
-            //printf("%u, %u, %u\n", abs(rgb.r - old_rgb.r), abs(rgb.g - old_rgb.g), abs(rgb.b - old_rgb.b));
-            post_rgb(rgb);
+            #ifdef DEBUG
+                printf("change\n");
+                printf("Average R: %u, Average G: %u, Average B: %u\n", rgb.r, rgb.g, rgb.b);
+                printf("%u, %u, %u\n", abs(rgb.r - old_rgb.r), abs(rgb.g - old_rgb.g), abs(rgb.b - old_rgb.b));
+            #else
+                post_rgb(rgb);
+            #endif
             old_rgb = rgb;
         }
         nanosleep(&sleep_time, NULL);
