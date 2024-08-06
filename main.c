@@ -46,10 +46,7 @@ void calculate_average_rgb(Display *display, Window window, int width, int heigh
     XImage *image = XGetImage(display, window, 0, 0, width, height, AllPlanes, ZPixmap);
 
     //unsigned long red_total = 0, green_total = 0, blue_total = 0;
-    long_RGB total_rgb;
-    total_rgb.r = 0;
-    total_rgb.g = 0;
-    total_rgb.b = 0;
+    long_RGB total_rgb = {0};
 
     unsigned long pixel;
 
@@ -127,7 +124,9 @@ int main() {
 
     screen = DefaultScreen(display);
 
-    RGB rgb;
+    RGB rgb = {0};
+    RGB old_rgb = {0};
+
     struct timespec sleep_time;
     sleep_time.tv_sec = 0;
     sleep_time.tv_nsec = 33333333L; // 30 Hz refresh rate
@@ -147,8 +146,13 @@ int main() {
 
         calculate_average_rgb(display, focused_window, width, height, &rgb);
         rgb = static_apply_gamma_correction(rgb);
-        //printf("Average R: %u, Average G: %u, Average B: %u\n", rgb.r, rgb.g, rgb.b);
-        post_rgb(rgb);
+        if((abs(rgb.r - old_rgb.r) > 5) || (abs(rgb.g - old_rgb.g) > 5) || (abs(rgb.r - old_rgb.r) > 5)){
+            //printf("change\n");
+            //printf("Average R: %u, Average G: %u, Average B: %u\n", rgb.r, rgb.g, rgb.b);
+            //printf("%u, %u, %u\n", abs(rgb.r - old_rgb.r), abs(rgb.g - old_rgb.g), abs(rgb.b - old_rgb.b));
+            post_rgb(rgb);
+            old_rgb = rgb;
+        }
         nanosleep(&sleep_time, NULL);
     }
 
