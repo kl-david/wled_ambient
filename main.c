@@ -146,7 +146,7 @@ int main() {
         height = attributes.height;
 
         calculate_average_rgb(display, focused_window, width, height, &rgb);
-        rgb = static_apply_gamma_correction(rgb);
+        //rgb = static_apply_gamma_correction(rgb);
         if((abs(rgb.r - old_rgb.r) > 5) || (abs(rgb.g - old_rgb.g) > 5) || (abs(rgb.r - old_rgb.r) > 5)){
             #ifdef DEBUG
                 printf("change\n");
